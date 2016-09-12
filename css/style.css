@@ -1,0 +1,24 @@
+
+* {
+  box-sizing: border-box;
+}
+
+.dragover {
+  background-color: rgba(0,0,255,0.1);
+}
+
+.DirectoryEntry {
+  padding: 2em;
+  display: inline-block;
+}
+
+[draggable] {
+  cursor: pointer;
+}
+
+:root, body {
+  display: block;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}

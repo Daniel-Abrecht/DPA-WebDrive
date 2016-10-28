@@ -38,9 +38,14 @@ class DragAndDropHandler {
 
   ondragstart( event ){
     this.ondragoverchange( event, event.target||null, null );
-    var e = Utils.findFirstParentElementWithAttribute( event.target, "data-path" );
-    if(e){
-      event.dataTransfer.setData("text/uri-list",e.dataset.path+"\r\n");
+    var e = Utils.findFirstParentElementWithAttribute( event.target, "draggable" );
+    var path = e && ( e.href || e.dataset.path );
+    if( path ){
+      let mime = e.dataset.mime || "application/octet-stream";
+      let info = Utils.getURIInfo( path );
+      event.dataTransfer.setData( "text/uri-list", info.uri );
+      event.dataTransfer.setData( "text/plain", info.uri );
+      event.dataTransfer.setData( "DownloadURL", mime + ":" + (info.name||"NO NAME").replace(/:/g,'_') + ":" + info.uri );
     }
   }
 

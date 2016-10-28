@@ -3,6 +3,10 @@
   box-sizing: border-box;
 }
 
+span {
+  display: block;
+}
+
 .dragover {
   background-color: rgba(0,0,255,0.1);
 }
@@ -14,6 +18,8 @@
 
 [draggable] {
   cursor: pointer;
+  text-decoration: none;
+  color: inherit;
 }
 
 :root, body {

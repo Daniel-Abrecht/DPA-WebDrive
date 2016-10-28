@@ -24,4 +24,13 @@ class Utils {
     };
   }
 
+  static getURIInfo( path ){
+    var a = document.createElement("a");
+    a.href = path;
+    return {
+      uri: a.href,
+      name: a.pathname.match(/([^\/]*)\/?$/)[1]
+    };
+  }
+
 }

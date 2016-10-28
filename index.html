@@ -9,9 +9,12 @@
     <script src="js/main.js" defer></script>
     <link rel="stylesheet" type="text/css" href="css/style.css" />
   </head>
-  <body data-path="http://daniel.users.local/webdrive/">
-    <div data-path="http://daniel.users.local/webdrive/test/" draggable="true" class="DirectoryEntry">
-      <div>test</div>
-    </div>
+  <body data-path=".">
+    <a href="test.txt" draggable="true" class="DirectoryEntry File">
+      <span>test.txt</span>
+    </a>
+    <a href="folder/" data-path="folder/" draggable="true" class="DirectoryEntry Directory">
+      <span>folder</span>
+    </a>
   </body>
 </html>

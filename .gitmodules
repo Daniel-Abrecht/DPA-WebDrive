@@ -1,0 +1,3 @@
+[submodule "lib/js-sha1"]
+	path = lib/js-sha1
+	url = https://github.com/emn178/js-sha1.git

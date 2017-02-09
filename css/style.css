@@ -3,17 +3,48 @@
   box-sizing: border-box;
 }
 
-span {
+:root, body {
   display: block;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-.dragover {
-  background-color: rgba(0,0,255,0.1);
+.DirectoryUI {
+  min-height: 100%;
+  background-color: #000;
+  color: #fff;
+  text-shadow: 0 0 1px #000;
 }
 
-.DirectoryEntry {
-  padding: 2em;
+.DirectoryUI .DirectoryEntry {
+  vertical-align: top;
   display: inline-block;
+  margin: 0.5rem;
+  background-color: rgba(128,128,128,0.2);
+  color: #fff;
+  width: 9rem;
+}
+
+.DirectoryEntry.dragover {
+  background-color: rgba(0,64,128,0.4);
+}
+
+.DirectoryUI .DirectoryEntry > span {
+  display: block;
+  padding: 0.5rem 1rem;
+  white-space: nowrap;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.DirectoryUI .DirectoryEntry > span:not(:first-child) {
+  padding: 0.5rem 1rem;
+}
+
+.DirectoryUI .DirectoryEntry .icon {
+  height: 5rem;
 }
 
 [draggable] {
@@ -22,9 +53,3 @@ span {
   color: inherit;
 }
 
-:root, body {
-  display: block;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}

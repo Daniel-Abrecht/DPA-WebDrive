@@ -39,7 +39,13 @@ class DragAndDropHandler {
   ondragstart( event ){
     this.ondragoverchange( event, event.target||null, null );
     var e = Utils.findFirstParentElementWithAttribute( event.target, "draggable" );
-    var path = e && ( e.href || e.dataset.path );
+    if( !e )
+      return;
+    var path;
+    if( e.getURI instanceof Function )
+      path = e.getURI();
+    if( !path )
+      path = e.href || e.dataset.path;
     if( path ){
       let mime = e.dataset.mime || "application/octet-stream";
       let info = Utils.getURIInfo( path );

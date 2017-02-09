@@ -9,6 +9,7 @@ class DirectoryEntry {
     a.entry = this;
     var href = file.href;
     a.href = href;
+    this.info = file;
     a.draggable = true;
     a.classList.add("DirectoryEntry");
     if( file.type == "inode/directory" ){

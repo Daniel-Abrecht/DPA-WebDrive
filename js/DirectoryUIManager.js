@@ -41,6 +41,11 @@ class DirectoryEntry {
     name.appendChild(document.createTextNode(file.name));
     a.appendChild(name);
 
+    a.menu = {
+      "Download": "download:" + href,
+      "Delete": ()=>dm.fs.remove(href)
+    };
+
     this.root = a;
 
   }
@@ -57,7 +62,6 @@ class DirectoryUIManager {
     this.fs = fs;
     this.root = document.createElement("div");
     this.root.classList.add("DirectoryUI");
-    addEventListener("contextmenu",(e)=>this.oncontextmenu(e));
   }
 
   getRoot(){
@@ -83,21 +87,6 @@ class DirectoryUIManager {
 
   addEntry(e){
     this.root.appendChild( e.getRoot() );
-  }
-
-  oncontextmenu( event ){
-    var t = event.target;
-    for( var e=t; e && e != this.root; e=e.parentNode );
-    if( !e )
-      return true;
-    for( var e=t; !e.entry; e=e.parentNode );
-    event.preventDefault();
-    this.showContextMenu(e.entry);
-    return false;
-  }
-
-  showContextMenu( entry ){
-    console.log(entry);
   }
 
 };

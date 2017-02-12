@@ -2,6 +2,37 @@
 
 class WebDavFileManager {
 
+  constructor(){
+    var eventlistener=new Map();
+    this.eventlistener = eventlistener;
+    for( var o of [
+      ["upload", "upload"],
+      ["copy", "copy"],
+      ["move", "move"],
+      ["remove", "remove"]
+    ]){
+      let f = this[o[0]];
+      let e = o[1];
+      this[o[0]] = function(){
+        var res = f.apply(this,arguments);
+        if( !res )
+          res = Promise.reject();
+        if(!( res instanceof Promise ))
+          res = Promise.resolve(res);
+        eventlistener.get(e).forEach((f)=>f(res));
+        return res;
+      };
+      eventlistener.set(e,[]);
+    }
+  }
+
+  addEventListener(name,func){
+    var l = this.eventlistener.get(name);
+    if(!l) return false;
+    l.push(func);
+    return true;
+  }
+
   getOpSrc( srcList, destination ){
     for( var s of srcList ){
       if( /https?:\/\//.test(s) ){
@@ -23,8 +54,7 @@ class WebDavFileManager {
   }
 
   upload( path, datatransfer ){
-    console.log( "upload", path, datatransfer );
-    Array.from(datatransfer.files).forEach( (x)=>this.uploadFile(x,path) );
+    return Promise.all( Array.from(datatransfer.files).map( (x)=>this.uploadFile(x,path) ) );
   }
 
   uploadFile( file, path ){
@@ -57,9 +87,7 @@ class WebDavFileManager {
     var src = this.getOpSrc( srcList, destination );
     if( !src )
       return false;
-    var res = this.mkmove( src, destination );
-    res.then(x=>console.log(x),x=>console.error(x));
-    return true;
+    return this.mkmove( src, destination );
   }
 
   link( srcList, destination ){
@@ -67,16 +95,37 @@ class WebDavFileManager {
     if( !src )
       return false;
     console.log( "link", src, destination );
-    return true;
+    return false;
   }
 
   copy( srcList, destination ){
     var src = this.getOpSrc( srcList, destination );
     if( !src )
       return false;
-    var res = this.mkcopy( src, destination );
-    res.then(x=>console.log(x),x=>console.error(x));
-    return true;
+    return this.mkcopy( src, destination );
+  }
+
+  remove( path ){
+    return new Promise(function(resolve,reject){
+      try {
+        var xhr = new XMLHttpRequest();
+        xhr.open( "DELETE", path, true );
+        xhr.onerror = function(error){
+          reject(error.error||error);
+        };
+        xhr.onload = function(){
+          if( ((this.status/100)|0) != 2 ){
+            reject(new Error(this.status+' '+this.statusText));
+            return;
+          }
+          resolve("OK");
+        }
+        xhr.setRequestHeader( "Overwrite", "F" );
+        xhr.send();
+      } catch(e){
+        reject(e);
+      }
+    });
   }
 
   mkcopy( src, dst ){
